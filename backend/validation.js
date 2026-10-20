@@ -39,5 +39,12 @@ export const layananSchema = Joi.object({
   layanan: Joi.string().trim().required().messages({
     "any.required": "Layanan wajib diisi",
   }),
-  layananLainnya: Joi.string().allow("").optional(),
+  layananLainnya: Joi.string().when("layanan", {
+    is: "Lainnya",
+    then: Joi.string().trim().required().messages({
+      "any.required": "Layanan Lainnya wajib diisi karena memilih opsi Lainnya",
+      "string.empty": "Layanan Lainnya tidak boleh kosong",
+    }),
+    otherwise: Joi.string().allow("").optional(),
+  }),
 });
