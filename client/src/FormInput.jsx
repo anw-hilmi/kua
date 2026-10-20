@@ -3,6 +3,7 @@ export default function FormInput({
   icon: Icon,
   required = false,
   error,
+  className = "", // Tangkap className dari parent
   ...props
 }) {
   return (
@@ -18,7 +19,11 @@ export default function FormInput({
         {Icon && (
           <Icon className="text-theme-icon mr-3 text-lg flex-shrink-0" />
         )}
-        <input className="w-full outline-none" {...props} />
+        {/* Gabungkan className bawaan dengan className dari parent */}
+        <input
+          className={`w-full bg-transparent border-none !outline-none focus:!outline-none focus:ring-0 focus:border-none ${className}`}
+          {...props}
+        />
       </div>
       {error && (
         <p className="text-red-500 text-xs mt-1 font-medium">{error}</p>

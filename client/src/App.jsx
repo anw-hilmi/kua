@@ -333,10 +333,14 @@ export default function FormulirLayanan() {
             <FormTextarea
               name="alamatDetail"
               value={formData.alamatDetail}
-              onChange={handleChange}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+                handleChange(e);
+              }}
               required
               rows="2"
-              placeholder="Nama Jalan, No. Rumah, RT/RW"
+              className="uppercase"
+              placeholder="NAMA JALAN, NO. RUMAH, RT/RW"
             />
           </div>
 

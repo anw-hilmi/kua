@@ -2,6 +2,7 @@ export default function FormTextarea({
   label,
   required = false,
   rows = 2,
+  className = "", // Tangkap className
   ...props
 }) {
   return (
@@ -13,7 +14,7 @@ export default function FormTextarea({
       )}
       <textarea
         rows={rows}
-        className="w-full bg-white border border-theme-input rounded-lg p-3 outline-none resize-none focus:ring-2 focus:ring-emerald-500 text-sm"
+        className={`w-full bg-white border border-theme-input rounded-lg p-3 resize-none text-sm !outline-none focus:!outline-none focus:ring-0 ${className}`}
         {...props}
       />
     </div>
