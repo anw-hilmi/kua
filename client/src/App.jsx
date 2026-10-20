@@ -381,9 +381,13 @@ export default function FormulirLayanan() {
               type="text"
               name="layananLainnya"
               value={formData.layananLainnya}
-              onChange={handleChange}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+                handleChange(e);
+              }}
               required
-              placeholder="Ketik nama layanan..."
+              className="uppercase"
+              placeholder="KETIK NAMA LAYANAN..."
             />
           )}
 
