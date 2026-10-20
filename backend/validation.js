@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export const layananSchema = Joi.object({
+  tanggal: Joi.string().allow("").optional(),
   nik: Joi.string().length(16).pattern(/^\d+$/).required().messages({
     "string.length": "NIK harus berjumlah 16 digit",
     "string.pattern.base": "NIK harus berupa angka",

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  FaCalendarAlt,
   FaIdCard,
   FaUser,
   FaMapMarkerAlt,
@@ -7,15 +8,20 @@ import {
   FaList,
   FaVenusMars,
 } from "react-icons/fa";
+import FormInput from "./FormInput";
+import FormSelect from "./FormSelect";
+import FormTextarea from "./FormTextarea";
 import "./index.css";
 
 export default function FormulirLayanan() {
-  // Inisialisasi state dari localStorage jika ada data tersimpan
+  const today = new Date().toISOString().split("T")[0];
+
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formData_layanan");
     return saved
       ? JSON.parse(saved)
       : {
+          tanggal: today,
           nik: "",
           nama: "",
           jenisKelamin: "",
@@ -31,13 +37,11 @@ export default function FormulirLayanan() {
   });
 
   const [loading, setLoading] = useState(false);
-
   const [listProvinsi, setListProvinsi] = useState([]);
   const [listKabupaten, setListKabupaten] = useState([]);
   const [listKecamatan, setListKecamatan] = useState([]);
   const [listDesa, setListDesa] = useState([]);
 
-  // Simpan otomatis ke localStorage setiap formData berubah
   useEffect(() => {
     localStorage.setItem("formData_layanan", JSON.stringify(formData));
   }, [formData]);
@@ -126,7 +130,6 @@ export default function FormulirLayanan() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi Wajib Isi Seluruh Kolom
     if (formData.nik.length !== 16) {
       alert("NIK harus tepat 16 digit angka.");
       return;
@@ -151,6 +154,7 @@ export default function FormulirLayanan() {
     setLoading(true);
 
     const payload = {
+      tanggal: formData.tanggal,
       nik: formData.nik,
       nama: formData.nama,
       jenisKelamin: formData.jenisKelamin,
@@ -178,9 +182,9 @@ export default function FormulirLayanan() {
 
       if (response.ok) {
         alert("Data berhasil disimpan ke Google Sheets!");
-        // Hapus draf formulir di localStorage setelah sukses kirim
         localStorage.removeItem("formData_layanan");
         setFormData({
+          tanggal: today,
           nik: "",
           nama: "",
           jenisKelamin: "",
@@ -215,86 +219,70 @@ export default function FormulirLayanan() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Tanggal */}
+          <FormInput
+            label="Tanggal"
+            icon={FaCalendarAlt}
+            type="date"
+            name="tanggal"
+            value={formData.tanggal}
+            onChange={handleChange}
+            required
+          />
+
           {/* NIK */}
-          <div>
-            <label className="block text-theme-label text-sm font-semibold mb-1">
-              NIK <span className="text-red-500">*</span>
-            </label>
-            <div
-              className={`input-container ${
-                formData.nik && formData.nik.length < 16
-                  ? "border-red-500"
-                  : "border-theme-input"
-              }`}
-            >
-              <FaIdCard className="text-theme-icon mr-3" />
-              <input
-                type="text"
-                inputMode="numeric"
-                name="nik"
-                value={formData.nik}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, "").slice(0, 16);
-                  handleChange({ target: { name: "nik", value } });
-                }}
-                required
-                minLength={16}
-                maxLength={16}
-                className="w-full outline-none"
-                placeholder="Masukkan 16 digit NIK"
-              />
-            </div>
-            {formData.nik && formData.nik.length < 16 && (
-              <p className="text-red-500 text-xs mt-1 font-medium">
-                NIK harus berjumlah 16 digit ({formData.nik.length}/16)
-              </p>
-            )}
-          </div>
+          <FormInput
+            label="NIK"
+            icon={FaIdCard}
+            type="text"
+            inputMode="numeric"
+            name="nik"
+            value={formData.nik}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "").slice(0, 16);
+              handleChange({ target: { name: "nik", value } });
+            }}
+            required
+            minLength={16}
+            maxLength={16}
+            placeholder="Masukkan 16 digit NIK"
+            error={
+              formData.nik && formData.nik.length < 16
+                ? `NIK harus berjumlah 16 digit (${formData.nik.length}/16)`
+                : null
+            }
+          />
 
           {/* Nama Lengkap */}
-          <div>
-            <label className="block text-theme-label text-sm font-semibold mb-1">
-              Nama Lengkap (Sesuai KTP) <span className="text-red-500">*</span>
-            </label>
-            <div className="input-container border-theme-input">
-              <FaUser className="text-theme-icon mr-3" />
-              <input
-                type="text"
-                name="nama"
-                value={formData.nama}
-                onChange={(e) => {
-                  e.target.value = e.target.value.toUpperCase();
-                  handleChange(e);
-                }}
-                required
-                className="w-full outline-none uppercase"
-                placeholder="NAMA LENGKAP"
-              />
-            </div>
-          </div>
+          <FormInput
+            label="Nama Lengkap (Sesuai KTP)"
+            icon={FaUser}
+            type="text"
+            name="nama"
+            value={formData.nama}
+            onChange={(e) => {
+              e.target.value = e.target.value.toUpperCase();
+              handleChange(e);
+            }}
+            required
+            className="w-full outline-none uppercase"
+            placeholder="NAMA LENGKAP"
+          />
 
           {/* Jenis Kelamin */}
-          <div>
-            <label className="block text-theme-label text-sm font-semibold mb-1">
-              Jenis Kelamin <span className="text-red-500">*</span>
-            </label>
-            <div className="input-container border-theme-input">
-              <FaVenusMars className="text-theme-icon mr-3" />
-              <select
-                name="jenisKelamin"
-                value={formData.jenisKelamin}
-                onChange={handleChange}
-                required
-                className="w-full outline-none bg-transparent text-gray-700"
-              >
-                <option value="" disabled>
-                  Pilih Jenis Kelamin
-                </option>
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-              </select>
-            </div>
-          </div>
+          <FormSelect
+            label="Jenis Kelamin"
+            icon={FaVenusMars}
+            name="jenisKelamin"
+            value={formData.jenisKelamin}
+            onChange={handleChange}
+            required
+            placeholder="Pilih Jenis Kelamin"
+            options={[
+              { id: "Laki-laki", name: "Laki-laki" },
+              { id: "Perempuan", name: "Perempuan" },
+            ]}
+          />
 
           {/* Alamat Wilayah Indonesia */}
           <div className="space-y-3">
@@ -303,164 +291,100 @@ export default function FormulirLayanan() {
               <span className="text-red-500">*</span>
             </label>
 
-            {/* Provinsi */}
-            <div className="input-container border-theme-input">
-              <FaMapMarkerAlt className="text-theme-icon mr-3" />
-              <select
-                onChange={handleProvinsiChange}
-                required
-                className="w-full outline-none bg-transparent text-gray-700"
-              >
-                <option value="">Pilih Provinsi</option>
-                {listProvinsi.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FormSelect
+              icon={FaMapMarkerAlt}
+              onChange={handleProvinsiChange}
+              required
+              placeholder="Pilih Provinsi"
+              options={listProvinsi}
+            />
 
-            {/* Kabupaten / Kota */}
-            <div className="input-container border-theme-input">
-              <select
-                onChange={handleKabupatenChange}
-                required
-                disabled={!listKabupaten.length}
-                className="w-full outline-none bg-transparent text-gray-700 disabled:opacity-50"
-              >
-                <option value="">Pilih Kabupaten/Kota</option>
-                {listKabupaten.map((k) => (
-                  <option key={k.id} value={k.id}>
-                    {k.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FormSelect
+              onChange={handleKabupatenChange}
+              required
+              disabled={!listKabupaten.length}
+              placeholder="Pilih Kabupaten/Kota"
+              options={listKabupaten}
+            />
 
-            {/* Kecamatan */}
-            <div className="input-container border-theme-input">
-              <select
-                onChange={handleKecamatanChange}
-                required
-                disabled={!listKecamatan.length}
-                className="w-full outline-none bg-transparent text-gray-700 disabled:opacity-50"
-              >
-                <option value="">Pilih Kecamatan</option>
-                {listKecamatan.map((kc) => (
-                  <option key={kc.id} value={kc.id}>
-                    {kc.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FormSelect
+              onChange={handleKecamatanChange}
+              required
+              disabled={!listKecamatan.length}
+              placeholder="Pilih Kecamatan"
+              options={listKecamatan}
+            />
 
-            {/* Kelurahan / Desa */}
-            <div className="input-container border-theme-input">
-              <select
-                name="desa"
-                onChange={(e) => {
-                  const desaObj = listDesa.find((d) => d.id === e.target.value);
-                  setFormData((prev) => ({
-                    ...prev,
-                    desa: desaObj?.name || "",
-                  }));
-                }}
-                required
-                disabled={!listDesa.length}
-                className="w-full outline-none bg-transparent text-gray-700 disabled:opacity-50"
-              >
-                <option value="">Pilih Kelurahan/Desa</option>
-                {listDesa.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FormSelect
+              name="desa"
+              onChange={(e) => {
+                const desaObj = listDesa.find((d) => d.id === e.target.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  desa: desaObj?.name || "",
+                }));
+              }}
+              required
+              disabled={!listDesa.length}
+              placeholder="Pilih Kelurahan/Desa"
+              options={listDesa}
+            />
 
-            {/* Detail Jalan / RT / RW */}
-            <textarea
+            <FormTextarea
               name="alamatDetail"
               value={formData.alamatDetail}
               onChange={handleChange}
               required
               rows="2"
-              className="w-full bg-white border border-theme-input rounded-lg p-3 outline-none resize-none focus:ring-2 focus:ring-emerald-500 text-sm"
               placeholder="Nama Jalan, No. Rumah, RT/RW"
             />
           </div>
 
           {/* No WhatsApp */}
-          <div>
-            <label className="block text-theme-label text-sm font-semibold mb-1">
-              No. WhatsApp <span className="text-red-500">*</span>
-            </label>
-            <div className="input-container border-theme-input">
-              <FaWhatsapp className="text-theme-icon mr-3" />
-              <input
-                type="text"
-                inputMode="numeric"
-                name="whatsapp"
-                value={formData.whatsapp}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, "");
-                  handleChange({ target: { name: "whatsapp", value } });
-                }}
-                required
-                className="w-full outline-none"
-                placeholder="Contoh: 08123456789"
-              />
-            </div>
-          </div>
+          <FormInput
+            label="No. WhatsApp"
+            icon={FaWhatsapp}
+            type="text"
+            inputMode="numeric"
+            name="whatsapp"
+            value={formData.whatsapp}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "");
+              handleChange({ target: { name: "whatsapp", value } });
+            }}
+            required
+            placeholder="Contoh: 08123456789"
+          />
 
           {/* Layanan */}
-          <div>
-            <label className="block text-theme-label text-sm font-semibold mb-1">
-              Layanan <span className="text-red-500">*</span>
-            </label>
-            <div className="input-container border-theme-input">
-              <FaList className="text-theme-icon mr-3" />
-              <select
-                name="layanan"
-                value={formData.layanan}
-                onChange={handleChange}
-                required
-                className="w-full outline-none bg-transparent text-gray-700"
-              >
-                <option value="" disabled>
-                  Pilih Layanan
-                </option>
-                <option value="Legalisir">Legalisir</option>
-                <option value="Surat Keterangan Nikah Tercatat">
-                  Surat Keterangan Nikah Tercatat
-                </option>
-                <option value="Surat Keterangan Nikah Tidak Tercatat/Pengantar Istbat Nikah">
-                  Surat Keterangan Nikah Tidak Tercatat/Pengantar Istbat Nikah
-                </option>
-                <option value="Duplikat (Hilang/Rusak)">
-                  Duplikat (Hilang/Rusak)
-                </option>
-                <option value="Lainnya">Lainnya</option>
-              </select>
-            </div>
-          </div>
+          <FormSelect
+            label="Layanan"
+            icon={FaList}
+            name="layanan"
+            value={formData.layanan}
+            onChange={handleChange}
+            required
+            placeholder="Pilih Layanan"
+            options={[
+              "Legalisir",
+              "Surat Keterangan Nikah Tercatat",
+              "Surat Keterangan Nikah Tidak Tercatat/Pengantar Istbat Nikah",
+              "Duplikat (Hilang/Rusak)",
+              "Lainnya",
+            ]}
+          />
 
           {/* Layanan Lainnya */}
           {formData.layanan === "Lainnya" && (
-            <div>
-              <label className="block text-theme-label text-sm font-semibold mb-1">
-                Sebutkan Layanan Lainnya <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="layananLainnya"
-                value={formData.layananLainnya}
-                onChange={handleChange}
-                required
-                className="w-full bg-white border border-theme-input rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ketik nama layanan..."
-              />
-            </div>
+            <FormInput
+              label="Sebutkan Layanan Lainnya"
+              type="text"
+              name="layananLainnya"
+              value={formData.layananLainnya}
+              onChange={handleChange}
+              required
+              placeholder="Ketik nama layanan..."
+            />
           )}
 
           <button
