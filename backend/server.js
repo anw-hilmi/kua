@@ -51,6 +51,18 @@ const getSheetData = async () => {
   }));
 };
 
+// Route dasar untuk tes server
+app.get("/", (req, res) => {
+  res.json({ status: "success", message: "Server API Layanan Berjalan" });
+});
+
+app.get("/api", (req, res) => {
+  res.json({
+    status: "success",
+    message: "API Endpoint Aktif. Gunakan /api/layanan",
+  });
+});
+
 // 1. Tambah Data (dengan middleware Joi)
 app.post("/api/layanan", validateLayanan, async (req, res) => {
   try {
