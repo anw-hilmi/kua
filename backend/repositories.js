@@ -12,11 +12,11 @@ const auth = new google.auth.GoogleAuth({
 const sheets = google.sheets({ version: "v4", auth });
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
-// Ambil semua data dari Sheet
+// Ambil semua data dari Sheet (Kolom A s/d K)
 export const getSheetData = async () => {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: "'DAFTAR HADIR'!A2:L",
+    range: "'DAFTAR HADIR'!A2:K",
   });
   const rows = res.data.values || [];
   return rows.map((row) => ({
@@ -31,12 +31,17 @@ export const getSheetData = async () => {
     alamatDetail: row[8] || "",
     whatsapp: row[9] || "",
     layanan: row[10] || "",
-    layananLainnya: row[11] || "",
   }));
 };
 
 // Tambah baris baru ke Sheet
 export const appendSheetData = async (data) => {
+  // Jika memilih "Lainnya", gunakan isi dari layananLainnya
+  const layananFinal =
+    data.layanan === "Lainnya"
+      ? data.layananLainnya || "Lainnya"
+      : data.layanan;
+
   const rowValues = [
     data.tanggal,
     data.nik,
@@ -48,13 +53,12 @@ export const appendSheetData = async (data) => {
     data.desa,
     data.alamatDetail,
     data.whatsapp,
-    data.layanan,
-    data.layananLainnya || "",
+    layananFinal,
   ];
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID,
-    range: "'DAFTAR HADIR'!A:L",
+    range: "'DAFTAR HADIR'!A:K",
     valueInputOption: "USER_ENTERED",
     requestBody: {
       values: [rowValues],
