@@ -39,7 +39,7 @@ export default function DataTable({ data = [], loading }) {
     <div className="relative overflow-x-auto rounded-xl border border-gray-200 shadow-sm bg-white">
       <table className="w-full text-left text-sm text-gray-600 whitespace-nowrap">
         <thead className="bg-emerald-50/80 text-emerald-900 font-bold text-xs uppercase border-b border-gray-200">
-          <tr>
+          <tr className="divide-x divide-gray-200">
             <th className="px-4 py-4 min-w-[50px] text-center">No</th>
             <th className="px-4 py-4 min-w-[120px]">Tanggal</th>
             <th className="px-4 py-4 min-w-[160px]">NIK</th>
@@ -58,7 +58,7 @@ export default function DataTable({ data = [], loading }) {
           {data.map((item, index) => (
             <tr
               key={item.nik || index}
-              className="hover:bg-emerald-50/30 transition-colors"
+              className="hover:bg-emerald-50/30 transition-colors divide-x divide-gray-100"
             >
               <td className="px-4 py-3 font-medium text-gray-900 text-center">
                 {index + 1}
