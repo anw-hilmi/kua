@@ -227,6 +227,7 @@ export default function FormulirLayanan() {
             name="tanggal"
             value={formData.tanggal}
             onChange={handleChange}
+            readOnly
             required
           />
 

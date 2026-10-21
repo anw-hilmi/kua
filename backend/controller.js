@@ -5,14 +5,13 @@ export const createLayanan = async (req, res) => {
     const data = req.body;
 
     // Jadikan kolom layanan dan layanan lainnya menjadi satu
-    const layananFinal =
-      data.layanan === "Lainnya"
-        ? data.layananLainnya || "Lainnya"
-        : data.layanan;
+    const layananFinal = (
+      data.layanan === "Lainnya" ? data.layananLainnya : data.layanan
+    ).toUpperCase();
 
     const rowValues = [
       data.tanggal,
-      data.nik,
+      `'${data.nik}`,
       data.nama,
       data.jenisKelamin,
       data.provinsi,
@@ -20,7 +19,7 @@ export const createLayanan = async (req, res) => {
       data.kecamatan,
       data.desa,
       data.alamatDetail,
-      data.whatsapp,
+      `'${data.whatsapp}`,
       layananFinal,
     ];
 
