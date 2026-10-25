@@ -1,57 +1,46 @@
 @import "tailwindcss";
 
-/* Tema Warna Kustom */
+@theme {
+  --primary-color: #2d5a40;
+  --primary-light-color: #edf4f0;
+  --primary-dark-color: #1b3a2b;
+
+  --secondary-color: #406a61;
+  --secondary-light-color: #e1ece8;
+  --secondary-dark-color: #26403a;
+
+  --btn-add-color: #406a61;
+  --btn-add-light-color: #edf4f0;
+  --btn-add-dark-color: #26403a;
+
+  --carousel-gradient: linear-gradient(
+    90deg,
+    rgba(45, 90, 64, 1) 0%,
+    rgba(64, 106, 97, 1) 50%,
+    rgba(237, 244, 240, 1) 100%
+  );
+}
+
 :root {
-  --color-bg-app: #ecfdf5; /* emerald-50 */
-  --color-card-border: #d1fae5; /* emerald-100 */
-  --color-primary: #059669; /* emerald-600 */
-  --color-primary-hover: #047857; /* emerald-700 */
-  --color-input-border: #6ee7b7; /* emerald-300 */
-  --color-text-main: #047857; /* emerald-700 */
-  --color-icon: #10b981; /* emerald-500 */
-  --color-focus-ring: #10b981; /* emerald-500 */
+  --border: #d2ded8;
+  --bg: #f2f6f4;
+  --text: #1e2925;
+  --muted: #638577;
+  --table-header-bg: #e1ece8;
+  --table-row-hover: #edf4f0;
+  --badge-bg: #e1ece8;
+  --badge-text: #1b3a2b;
+  --stat-icon-bg: #e1ece8;
+  --stat-icon-color: #2d5a40;
 }
 
-/* Custom Utilities berbasis Variabel Warna */
-.bg-theme-page {
-  background-color: var(--color-bg-app);
-}
-.border-theme-card {
-  border-color: var(--color-card-border);
-}
-.text-theme-title {
-  color: var(--color-text-main);
-}
-.text-theme-label {
-  color: var(--color-text-main);
-}
-.text-theme-icon {
-  color: var(--color-icon);
-}
-.border-theme-input {
-  border-color: var(--color-input-border);
-}
-
-.bg-theme-btn {
-  background-color: var(--color-primary);
-}
-.bg-theme-btn:hover {
-  background-color: var(--color-primary-hover);
-}
-
-.input-container {
-  display: flex;
-  align-items: center;
-  background-color: #ffffff;
-  border-width: 1px;
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
-}
-
-.input-container:focus-within {
-  --tw-ring-color: var(--color-focus-ring);
-  box-shadow:
-    var(--tw-ring-offset-shadow, 0 0 #0000),
-    var(--tw-ring-shadow, 0 0 #0000),
-    0 0 0 2px var(--tw-ring-color);
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
 }
