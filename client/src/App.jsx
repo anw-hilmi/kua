@@ -395,11 +395,10 @@ export default function FormulirLayanan() {
               placeholder="KETIK NAMA LAYANAN..."
             />
           )}
-
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-theme-btn text-white font-bold py-3 rounded-xl transition duration-300 mt-6 shadow-md disabled:opacity-50"
+            className="w-full bg-theme-btn hover:bg-theme-btn-hover text-white font-bold py-3 rounded-xl transition duration-300 mt-6 shadow-md disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Mengirim..." : "Kirim Formulir"}
           </button>

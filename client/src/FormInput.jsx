@@ -3,14 +3,16 @@ export default function FormInput({
   icon: Icon,
   required = false,
   error,
-  className = "", // Tangkap className dari parent
+  className = "",
   ...props
 }) {
   return (
     <div>
-      <label className="block text-theme-label text-sm font-semibold mb-1">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      {label && (
+        <label className="block text-theme-label text-sm font-semibold mb-1">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+      )}
       <div
         className={`input-container ${
           error ? "border-red-500" : "border-theme-input"
@@ -19,9 +21,8 @@ export default function FormInput({
         {Icon && (
           <Icon className="text-theme-icon mr-3 text-lg flex-shrink-0" />
         )}
-        {/* Gabungkan className bawaan dengan className dari parent */}
         <input
-          className={`w-full bg-transparent border-none !outline-none focus:!outline-none focus:ring-0 focus:border-none ${className}`}
+          className={`w-full bg-transparent border-none text-theme-label text-sm placeholder:text-gray-400 !outline-none focus:!outline-none focus:ring-0 focus:border-none ${className}`}
           {...props}
         />
       </div>

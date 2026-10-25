@@ -4,10 +4,11 @@ export default function FormSelect({
   required = false,
   options = [],
   placeholder = "Pilih...",
+  className = "",
   ...props
 }) {
   return (
-    <div>
+    <div className={className}>
       {label && (
         <label className="block text-theme-label text-sm font-semibold mb-1">
           {label} {required && <span className="text-red-500">*</span>}
@@ -18,7 +19,7 @@ export default function FormSelect({
           <Icon className="text-theme-icon mr-3 text-lg flex-shrink-0" />
         )}
         <select
-          className="w-full outline-none bg-transparent text-gray-700 disabled:opacity-50"
+          className="w-full outline-none bg-transparent text-theme-label text-sm disabled:opacity-50"
           {...props}
         >
           <option value="">{placeholder}</option>
