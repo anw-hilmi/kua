@@ -23,7 +23,7 @@ export default function FormSelect({
           {...props}
         >
           <option value="">{placeholder}</option>
-          {options.map((opt) => (
+          {(Array.isArray(options) ? options : []).map((opt) => (
             <option
               key={opt.id || opt.value || opt}
               value={opt.id || opt.value || opt}

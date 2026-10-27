@@ -47,9 +47,9 @@ export default function FormulirLayanan() {
   }, [formData]);
 
   useEffect(() => {
-    fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
+    fetch("https://www.emsifa.com/api-wilayah-indonesia/v2/provinces.json")
       .then((res) => res.json())
-      .then((data) => setListProvinsi(data))
+      .then((json) => setListProvinsi(json.data || []))
       .catch((err) => console.error("Gagal mengambil data provinsi:", err));
   }, []);
 
@@ -78,10 +78,10 @@ export default function FormulirLayanan() {
 
     if (provId) {
       fetch(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provId}.json`,
+        `https://www.emsifa.com/api-wilayah-indonesia/v2/regencies/${provId}.json`,
       )
         .then((res) => res.json())
-        .then((data) => setListKabupaten(data));
+        .then((json) => setListKabupaten(json.data || []));
     }
   };
 
@@ -100,10 +100,10 @@ export default function FormulirLayanan() {
 
     if (kabId) {
       fetch(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kabId}.json`,
+        `https://www.emsifa.com/api-wilayah-indonesia/v2/districts/${kabId}.json`,
       )
         .then((res) => res.json())
-        .then((data) => setListKecamatan(data));
+        .then((json) => setListKecamatan(json.data || []));
     }
   };
 
@@ -120,10 +120,10 @@ export default function FormulirLayanan() {
 
     if (kecId) {
       fetch(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecId}.json`,
+        `https://www.emsifa.com/api-wilayah-indonesia/v2/villages/${kecId}.json`,
       )
         .then((res) => res.json())
-        .then((data) => setListDesa(data));
+        .then((json) => setListDesa(json.data || []));
     }
   };
 
