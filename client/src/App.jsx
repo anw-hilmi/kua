@@ -18,24 +18,24 @@ export default function FormulirLayanan() {
 
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("formData_layanan");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          tanggal: today,
-          nik: "",
-          nama: "",
-          jenisKelamin: "",
-          provinsi: "",
-          kabupaten: "",
-          kecamatan: "",
-          desa: "",
-          alamatDetail: "",
-          whatsapp: "",
-          layanan: "",
-          layananLainnya: "",
-        };
+    if (saved) {
+      return { ...JSON.parse(saved), tanggal: today };
+    }
+    return {
+      tanggal: today,
+      nik: "",
+      nama: "",
+      jenisKelamin: "",
+      provinsi: "",
+      kabupaten: "",
+      kecamatan: "",
+      desa: "",
+      alamatDetail: "",
+      whatsapp: "",
+      layanan: "",
+      layananLainnya: "",
+    };
   });
-
   const [loading, setLoading] = useState(false);
   const [listProvinsi, setListProvinsi] = useState([]);
   const [listKabupaten, setListKabupaten] = useState([]);
